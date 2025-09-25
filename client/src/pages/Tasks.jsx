@@ -1,39 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { getJSON, postJSON } from '../api'
+import { api } from '../lib/api'
 
 export default function Tasks(){
   const [rows, setRows] = useState([])
-  const [msg, setMsg] = useState('')
-
-  async function load(){
-    const data = await getJSON('/api/orchestrator/tasks/')
-    setRows(data)
-  }
-  async function processNow(){
-    setMsg('Processing...')
-    await postJSON('/api/orchestrator/process-now/', {})
-    await load()
-    setMsg('Done')
-  }
   useEffect(()=>{ load() }, [])
-
+  async function load(){ setRows(await api('/orchestrator/tasks/')) }
+  async function processNow(){ await api('/orchestrator/process-now/', { method:'POST' }); await load() }
   return (
     <div className="card">
-      <h2>Tasks</h2>
-      <div>
-        <button onClick={processNow}>Process Events Now</button>
-        <button onClick={load}>Refresh</button>
-        <span className="small">{msg}</span>
-      </div>
-      <table className="table">
-        <thead><tr><th>ID</th><th>Team</th><th>Summary</th><th>Details</th><th>Due</th><th>Status</th><th>Created</th></tr></thead>
+      <h3 className="card-title">Tasks</h3>
+      <button className="btn" onClick={processNow}>Process Events Now</button>
+      <table className="table" style={{marginTop:12}}>
+        <thead><tr><th>ID</th><th>Summary</th><th>Due</th><th>Status</th><th>Created</th></tr></thead>
         <tbody>
-          {rows.map(t => (
-            <tr key={t.id}>
-              <td>{t.id}</td><td>{t.team}</td><td>{t.summary}</td><td>{t.details}</td>
-              <td>{t.due_at}</td><td>{t.status}</td><td>{t.created_at}</td>
-            </tr>
-          ))}
+        {rows.map(r => (
+          <tr key={r.id}><td>{r.id}</td><td>{r.summary}</td><td>{new Date(r.due_at).toLocaleString()}</td><td>{r.status}</td><td>{new Date(r.created_at).toLocaleString()}</td></tr>
+        ))}
         </tbody>
       </table>
     </div>

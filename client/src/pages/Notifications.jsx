@@ -1,38 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { getJSON, postJSON } from '../api'
+import { api } from '../lib/api'
 
 export default function Notifications(){
   const [rows, setRows] = useState([])
-  const [msg, setMsg] = useState('')
-
-  async function load(){
-    const data = await getJSON('/api/orchestrator/notifications/')
-    setRows(data)
-  }
-  async function processNow(){
-    setMsg('Processing...')
-    await postJSON('/api/orchestrator/process-now/', {})
-    await load()
-    setMsg('Done')
-  }
   useEffect(()=>{ load() }, [])
-
+  async function load(){ setRows(await api('/orchestrator/notifications/')) }
+  async function processNow(){ await api('/orchestrator/process-now/', { method:'POST' }); await load() }
   return (
     <div className="card">
-      <h2>Notifications</h2>
-      <div>
-        <button onClick={processNow}>Process Events Now</button>
-        <button onClick={load}>Refresh</button>
-        <span className="small">{msg}</span>
-      </div>
-      <table className="table">
-        <thead><tr><th>ID</th><th>Channel</th><th>Message</th><th>Status</th><th>Created</th></tr></thead>
+      <h3 className="card-title">Notifications</h3>
+      <button className="btn" onClick={processNow}>Process Events Now</button>
+      <table className="table" style={{marginTop:12}}>
+        <thead><tr><th>ID</th><th>Message</th><th>Status</th><th>Created</th></tr></thead>
         <tbody>
-          {rows.map(n => (
-            <tr key={n.id}>
-              <td>{n.id}</td><td>{n.channel}</td><td>{n.message}</td><td>{n.status}</td><td>{n.created_at}</td>
-            </tr>
-          ))}
+        {rows.map(r => (
+          <tr key={r.id}><td>{r.id}</td><td>{r.message}</td><td>{r.status}</td><td>{new Date(r.created_at).toLocaleString()}</td></tr>
+        ))}
         </tbody>
       </table>
     </div>

@@ -1,31 +1,25 @@
 import React, { useState } from 'react'
-import { postJSON } from '../api'
+import { api } from '../lib/api'
 
 export default function Dashboard(){
   const [msg, setMsg] = useState('')
 
   async function seed(){
-    setMsg('Seeding...')
-    try{
-      await postJSON('/api/config/seed/', {})
-      setMsg('Seeded form, rules, workflow. You can use Visit & Process Events now.')
-    }catch(e){
-      setMsg('Seed failed: ' + e.message)
-    }
+    const r = await api('/config/seed/', { method:'POST' })
+    setMsg(r.message || 'Seeded.')
   }
 
   return (
-    <div className="grid">
-      <div className="card">
-        <h2>Quick Start</h2>
-        <ol>
-          <li>Click <b>Seed Demo Data</b> (below).</li>
-          <li>Open <b>Visit</b>, enter height/weight/HbA1c (e.g., 170/78/9.4), then <b>Save Visit</b>.</li>
-          <li>Open <b>Notifications</b> or <b>Tasks</b>, click <b>Process Events Now</b>, then refresh.</li>
-        </ol>
-        <button onClick={seed}>Seed Demo Data</button>
-        <div className={msg.includes('failed') ? 'error' : 'success'}>{msg}</div>
-      </div>
+    <div className="card">
+      <h3 className="card-title">Dashboard</h3>
+      <p>Seed default OPD configuration and start using the app.</p>
+      <button className="btn" onClick={seed}>Seed Demo Data</button>
+      {msg && <p className="success-text">{msg}</p>}
+      <ul className="list">
+        <li>Visit page: live BMI calculation & HbA1c check</li>
+        <li>Configurator: View/Publish Form, Rules, Workflow</li>
+        <li>Visit History, Notifications, Tasks pages</li>
+      </ul>
     </div>
   )
 }
