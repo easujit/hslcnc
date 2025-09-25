@@ -1,0 +1,31 @@
+
+<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Configurator - Visit OPD</title>
+<link rel="stylesheet" href="/static/css/styles.css"></head><body>
+<h1>Configurator: visit_opd</h1>
+<div class="grid">
+<section><h2>Form Builder</h2><div>
+<button id="loadForm">Load Current Form</button><button id="publishForm">Publish Form</button></div>
+<div class="builder"><div>
+<label>Field ID <input id="f_id"/></label>
+<label>Label <input id="f_label"/></label>
+<label>Type <select id="f_type"><option>number</option><option>text</option><option>boolean</option></select></label>
+<label><input type="checkbox" id="f_required"/> Required</label>
+<button id="addField">Add Field</button></div>
+<textarea id="formJson" rows="14" spellcheck="false"></textarea></div></section>
+<section><h2>Rules Builder</h2><div>
+<button id="loadRules">Load Current Rules</button><button id="publishRules">Publish Rules</button></div>
+<div class="builder"><div>
+<label>When (Python expr) <input id="r_when" size="40" placeholder="hba1c is not None and hba1c >= 9"/></label>
+<label>Action <select id="r_action"><option value="set_field">set_field (id, expr)</option><option value="set_visibility">set_visibility (id, visible)</option><option value="banner">banner (text)</option></select></label>
+<div id="r_params"></div><button id="addRule">Add Rule</button></div>
+<textarea id="rulesJson" rows="14" spellcheck="false"></textarea></div></section>
+<section><h2>Workflow Builder</h2><div>
+<button id="loadWorkflow">Load Current Workflow</button><button id="publishWorkflow">Publish Workflow</button></div>
+<div class="builder"><div>
+<label>Trigger: <input id="w_trigger" value='{"on":"submit","form":"visit_opd"}' size="40"/></label>
+<label>If (Python expr): <input id="w_if" value="hba1c is not None and hba1c >= 9" size="40"/></label>
+<label>Do (JSON actions):</label>
+<textarea id="w_do" rows="4">[{"notify":{"channel":"endocrinology_on_call","message":"High HbA1c ({{hba1c}}%) for patient {{patient_id}}"}},{"create_task":{"team":"diabetes_education","summary":"Schedule educator session","details":"HbA1c={{hba1c}}","due_in_days":7}}]</textarea>
+</div><textarea id="workflowJson" rows="10" spellcheck="false"></textarea></div></section></div>
+<script src="/static/js/configurator.js"></script>
+</body></html>

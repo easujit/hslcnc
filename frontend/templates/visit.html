@@ -1,0 +1,16 @@
+
+<!DOCTYPE html><html><head><meta charset="utf-8"/><title>Visit OPD - Demo</title>
+<link rel="stylesheet" href="/static/css/styles.css"></head><body>
+<header><h1>Visit OPD</h1><nav><a href="/ui/configurator/">Open Configurator</a></nav></header>
+<section class="panel"><h2>Form (live preview)</h2>
+<div class="form-grid">
+<label>Patient ID <input id="patient_id" placeholder="P123"/></label>
+<label>Height (cm) <input id="height_cm" type="number"/></label>
+<label>Weight (kg) <input id="weight_kg" type="number"/></label>
+<label>HbA1c (%) <input id="hba1c" type="number" step="0.1"/></label>
+<label>BMI <input id="bmi" type="number" readonly/></label>
+<label id="book_ed_wrap" style="display:none;"><input id="book_educator" type="checkbox"/> Book Diabetes Educator session</label>
+</div><div class="warn" id="warnings"></div>
+<div><button id="submitBtn">Save Visit</button><span id="submitStatus"></span></div></section>
+<script src="/static/js/visit.js"></script>
+</body></html>

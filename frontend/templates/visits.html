@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8"/>
+  <title>Visit History</title>
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+  <header>
+    <h1>Visit History</h1>
+    <nav>
+      <a href="/ui/">Dashboard</a> |
+      <a href="/ui/visit/">Visit</a> |
+      <a href="/ui/configurator/">Configurator</a> |
+      <a href="/ui/notifications/">Notifications</a> |
+      <a href="/ui/tasks/">Tasks</a>
+    </nav>
+  </header>
+  <div>
+    <button id="refresh">Refresh</button>
+  </div>
+  <table id="visitsTbl" class="table">
+    <thead>
+      <tr><th>Visit ID</th><th>Patient</th><th>Created</th><th>Height</th><th>Weight</th><th>BMI</th><th>HbA1c</th><th>Educator?</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script src="/static/js/visits.js"></script>
+</body>
+</html>
