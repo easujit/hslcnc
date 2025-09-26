@@ -36,18 +36,10 @@ class ConsentViewSet(viewsets.ModelViewSet):
     
     def create(self, request, *args, **kwargs):
         """Create new consent"""
-        try:
-            tenant_id = require_tenant()
-        except ValueError:
-            return Response({"error": "Tenant context required"}, status=401)
-        
         serializer = ConsentCreateSerializer(data=request.data)
         if serializer.is_valid():
-            try:
-                consent = serializer.save(tenant_id=tenant_id)
-                return Response(ConsentSerializer(consent).data, status=status.HTTP_201_CREATED)
-            except Exception as e:
-                return Response({"error": f"Database error: {str(e)}"}, status=500)
+            consent = serializer.save(tenant_id=get_current_tenant())
+            return Response(ConsentSerializer(consent).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ConsentRequestViewSet(viewsets.ModelViewSet):

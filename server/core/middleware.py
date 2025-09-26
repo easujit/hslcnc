@@ -35,15 +35,12 @@ class TenantContextMiddleware(MiddlewareMixin):
         if not tenant_id and settings.DEBUG:
             tenant_id = request.META.get('HTTP_X_TENANT')
         
-        # If no tenant found, use default tenant for testing
+        # If no tenant found, return 401
         if not tenant_id:
-            if settings.DEBUG:
-                tenant_id = "test-tenant"
-            else:
-                return JsonResponse(
-                    {"error": "no tenant", "message": "Tenant context required"},
-                    status=401
-                )
+            return JsonResponse(
+                {"error": "no tenant", "message": "Tenant context required"},
+                status=401
+            )
         
         # Set tenant context
         set_current_tenant(tenant_id)

@@ -214,23 +214,16 @@ def evaluate_rules(request, form):
         
         purpose = spec.get('purpose', 'treatment')
         
-        # Check consent - but be more lenient for testing
-        try:
-            consent_result = check_consent_for_request(request, patient_id, purpose, data_categories)
-            
-            if not consent_result['allow']:
-                # For testing, log warning but don't block
-                print(f"Consent warning: {consent_result['reason']}")
-                # return Response({
-                #     "errors": [f"Consent required: {consent_result['reason']}"],
-                #     "warnings": [],
-                #     "setField": [],
-                #     "visibility": []
-                # }, status=403)
-        except Exception as e:
-            # If consent check fails, log but don't block
-            print(f"Consent check error: {e}")
-            pass
+        # Check consent
+        consent_result = check_consent_for_request(request, patient_id, purpose, data_categories)
+        
+        if not consent_result['allow']:
+            return Response({
+                "errors": [f"Consent required: {consent_result['reason']}"],
+                "warnings": [],
+                "setField": [],
+                "visibility": []
+            }, status=403)
     
     result = evaluate_spec(spec, data)
     

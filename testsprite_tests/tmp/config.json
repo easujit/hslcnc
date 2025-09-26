@@ -1,18 +1,7 @@
 {
-  "status": "commited",
-  "type": "frontend",
+  "status": "init",
   "scope": "codebase",
-  "localEndpoint": "http://localhost:5174",
-  "loginUser": "sk",
-  "loginPassword": "sk",
-  "executionArgs": {
-    "projectName": "hospital_lcnc",
-    "projectPath": "/Users/sujitkumar/Desktop/lcnc/hospital_lcnc",
-    "testIds": [],
-    "additionalInstruction": "Please run comprehensive frontend testing to verify all critical issues have been fixed. Both frontend (port 5174) and backend (port 8000) servers are now running properly. Backend APIs for version history have been implemented, and performance issues have been addressed with timeouts and optimizations.",
-    "envs": {
-      "API_KEY": "sk-user-Xw6k9Lqhv0v4cHeqzwNiduOZNv7uTb4cUBKvqY6Eg3rJk7pXfrE4lthuO-hsWQjUZdqnBQrYn8ETYgB-4rXBFOfzLi0Z7LZLkgkVmfTMcHNV9Uwx5tbYbtf7fjOEE-7uwgw"
-    }
-  },
-  "proxy": "http://f7cbd697-42a1-4667-8e96-037c759ee324:ZZzyW8qredx2x2RgrzgJagVL2w5mB6tA@tun.testsprite.com:8080"
+  "type": "frontend",
+  "localEndpoint": "http://localhost:5173",
+  "serverPort": 50699
 }

@@ -87,7 +87,6 @@ export default function ConsentManagement() {
       
       const consentData = {
         ...newConsent,
-        tenant_id: localStorage.getItem('current_tenant') || 'test-tenant',
         date_range_start: newConsent.date_range_start || now.toISOString(),
         date_range_end: newConsent.date_range_end || oneYearLater.toISOString(),
         expiry: newConsent.expiry || oneYearLater.toISOString()
@@ -169,7 +168,6 @@ export default function ConsentManagement() {
       
       const consentData = {
         patient_id: newPatient.external_id,
-        tenant_id: localStorage.getItem('current_tenant') || 'test-tenant',
         purpose: 'treatment',
         data_categories: ['demographics', 'vitals', 'labs', 'diagnosis', 'medications', 'procedures', 'documents'],
         date_range_start: now.toISOString(),
@@ -190,7 +188,6 @@ export default function ConsentManagement() {
       const patientData = {
         external_id: newPatient.external_id,
         name: newPatient.name,
-        tenant_id: localStorage.getItem('current_tenant') || 'test-tenant',
         custom_data: {
           age: newPatient.age,
           height_cm: newPatient.height_cm,

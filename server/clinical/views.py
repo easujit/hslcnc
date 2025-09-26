@@ -5,42 +5,14 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.db import transaction
-from django.utils import timezone
 from .models import Patient, Visit, Document
 from .serializers import PatientSerializer, VisitSerializer, DocumentSerializer
 from core.tenant import get_current_tenant, require_tenant
 from consent.utils import check_consent_for_request, extract_data_categories_from_request
-import time
-import signal
-
-class TimeoutError(Exception):
-    pass
-
-def timeout_handler(signum, frame):
-    raise TimeoutError("Operation timed out")
-
-def with_timeout(seconds=30):
-    def decorator(func):
-        def wrapper(*args, **kwargs):
-            # Set the signal handler
-            old_handler = signal.signal(signal.SIGALRM, timeout_handler)
-            signal.alarm(seconds)
-            
-            try:
-                result = func(*args, **kwargs)
-                return result
-            finally:
-                # Reset the alarm
-                signal.alarm(0)
-                signal.signal(signal.SIGALRM, old_handler)
-        return wrapper
-    return decorator
 
 @api_view(['GET', 'POST'])
 @permission_classes([AllowAny])
 @authentication_classes([])
-@with_timeout(30)  # 30 second timeout
 def patients_list(request):
     try:
         tenant_id = require_tenant()
@@ -48,50 +20,36 @@ def patients_list(request):
         return Response({"error": "Tenant context required"}, status=401)
     
     if request.method == 'GET':
-        try:
-            # Optimize query with select_related and limit
-            qs = Patient.objects.filter(tenant_id=tenant_id).select_related().order_by('-id')[:50]
-            return Response(PatientSerializer(qs, many=True).data)
-        except Exception as e:
-            return Response({"error": f"Database error: {str(e)}"}, status=500)
+        qs = Patient.objects.filter(tenant_id=tenant_id).order_by('-id')[:100]
+        return Response(PatientSerializer(qs, many=True).data)
     
     elif request.method == 'POST':
-        try:
-            # Validate required fields first
-            required_fields = ['external_id', 'name']
-            for field in required_fields:
-                if not request.data.get(field):
-                    return Response({"error": f"Field '{field}' is required"}, status=400)
-            
-            # Check for duplicate external_id
-            if Patient.objects.filter(tenant_id=tenant_id, external_id=request.data['external_id']).exists():
-                return Response({"error": "Patient with this external_id already exists"}, status=400)
-            
-            # Create patient with optimized serializer
-            serializer = PatientSerializer(data=request.data)
-            if serializer.is_valid():
-                patient = serializer.save(tenant_id=tenant_id)
-                return Response(PatientSerializer(patient).data, status=201)
-            return Response(serializer.errors, status=400)
-        except TimeoutError:
-            return Response({"error": "Operation timed out. Please try again."}, status=408)
-        except Exception as e:
-            return Response({"error": f"Error creating patient: {str(e)}"}, status=500)
+        # Create a new patient directly without creating a visit
+        serializer = PatientSerializer(data=request.data)
+        if serializer.is_valid():
+            # Set tenant_id before saving
+            patient = serializer.save(tenant_id=tenant_id)
+            return Response(PatientSerializer(patient).data, status=201)
+        return Response(serializer.errors, status=400)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 @authentication_classes([])
 def visits_list(request):
+    from policies.authorization import authorize
+    from policies.models import PolicyRule
+    
     try:
         tenant_id = require_tenant()
     except ValueError:
         return Response({"error": "Tenant context required"}, status=401)
     
-    try:
-        qs = Visit.objects.filter(tenant_id=tenant_id).order_by('-id')[:100]
-        return Response(VisitSerializer(qs, many=True).data)
-    except Exception as e:
-        return Response({"error": f"Database error: {str(e)}"}, status=500)
+    qs = Visit.objects.filter(tenant_id=tenant_id).order_by('-id')[:100]
+    user_claims = getattr(request, 'user_claims', {})
+    
+    # DISABLED RBAC FILTERING - Show all visits to all roles
+    # Return all visits without any filtering
+    return Response(VisitSerializer(qs, many=True).data)
 
 @csrf_exempt
 @api_view(['POST'])
