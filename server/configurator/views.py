@@ -179,3 +179,76 @@ def publish_config(request, kind, name):
         spec_json=spec
     )
     return Response({"status":"ok","version":cfg.version, "warnings": warnings})
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+@authentication_classes([])
+def get_versions(request, kind, name):
+    """Get version history for a specific configuration type"""
+    try:
+        tenant_id = require_tenant()
+    except ValueError:
+        return Response({"error": "Tenant context required"}, status=401)
+    
+    versions = Config.objects.filter(
+        tenant_id=tenant_id,
+        kind=kind,
+        name=name,
+        scope='global'
+    ).order_by('-version').values(
+        'version', 'status', 'created_at', 'updated_at'
+    )
+    
+    return Response(list(versions))
+
+@csrf_exempt
+@api_view(['POST'])
+@permission_classes([AllowAny])
+@authentication_classes([])
+def rollback_config(request, kind, name):
+    """Rollback to a specific version of a configuration"""
+    try:
+        tenant_id = require_tenant()
+    except ValueError:
+        return Response({"error": "Tenant context required"}, status=401)
+    
+    target_version = request.data.get('version')
+    if not target_version:
+        return Response({"error": "Version number required"}, status=400)
+    
+    # Find the target version
+    target_config = Config.objects.filter(
+        tenant_id=tenant_id,
+        kind=kind,
+        name=name,
+        version=target_version,
+        scope='global'
+    ).first()
+    
+    if not target_config:
+        return Response({"error": f"Version {target_version} not found"}, status=404)
+    
+    # Get the latest version
+    latest = Config.objects.filter(
+        tenant_id=tenant_id,
+        kind=kind,
+        name=name,
+        scope='global'
+    ).aggregate(Max('version'))['version__max'] or 0
+    
+    # Create a new version with the target config's spec
+    new_config = Config.objects.create(
+        tenant_id=tenant_id,
+        kind=kind,
+        name=name,
+        version=latest+1,
+        status='published',
+        scope='global',
+        spec_json=target_config.spec_json
+    )
+    
+    return Response({
+        "status": "ok",
+        "message": f"Rolled back to version {target_version}",
+        "new_version": new_config.version
+    })

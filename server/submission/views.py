@@ -41,6 +41,19 @@ def submit_visit_opd(request):
         # Return idempotent response
         result = existing.payload_json.get("_result", {})
         return Response({"status":"ok","idempotent":True, **result})
+    elif existing and existing.status != 'processed':
+        # If there's an existing submission that's not processed, wait for it to complete
+        # or return an error if it's been too long
+        from django.utils import timezone
+        from datetime import timedelta
+        if existing.created_at < timezone.now() - timedelta(minutes=5):
+            # If it's been more than 5 minutes, mark as error and create new
+            existing.status = 'error'
+            existing.errors_json = ["Submission timeout"]
+            existing.save()
+        else:
+            # Still processing, return error
+            return Response({"error":"Submission already in progress"}, status=409)
 
     payload = request.data if isinstance(request.data, dict) else {}
     rules = _get_effective_rules("visit_opd")

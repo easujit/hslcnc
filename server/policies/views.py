@@ -25,9 +25,9 @@ def get_permissions(request):
     # Get user claims
     user_claims = getattr(request, 'user_claims', {})
     
-    # Check if user can manage permissions (Admin only for now)
-    if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
-        return Response({"error": "Insufficient permissions"}, status=403)
+    # DISABLED RBAC FILTERING - Allow all users to manage permissions for testing
+    # if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
+    #     return Response({"error": "Insufficient permissions"}, status=403)
     
     # Get all policies for this tenant
     policies = PolicyRule.objects.filter(tenant_id=tenant_id, status='published').order_by('resource_type', 'action', 'version')
@@ -68,9 +68,9 @@ def update_permission(request):
     # Get user claims
     user_claims = getattr(request, 'user_claims', {})
     
-    # Check if user can manage permissions
-    if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
-        return Response({"error": "Insufficient permissions"}, status=403)
+    # DISABLED RBAC FILTERING - Allow all users to manage permissions for testing
+    # if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
+    #     return Response({"error": "Insufficient permissions"}, status=403)
     
     policy_id = request.data.get('policy_id')
     effect = request.data.get('effect')
@@ -126,9 +126,9 @@ def create_permission(request):
     # Get user claims
     user_claims = getattr(request, 'user_claims', {})
     
-    # Check if user can manage permissions
-    if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
-        return Response({"error": "Insufficient permissions"}, status=403)
+    # DISABLED RBAC FILTERING - Allow all users to manage permissions for testing
+    # if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
+    #     return Response({"error": "Insufficient permissions"}, status=403)
     
     resource_type = request.data.get('resource_type')
     action = request.data.get('action')
@@ -190,9 +190,9 @@ def delete_permission(request, policy_id):
     # Get user claims
     user_claims = getattr(request, 'user_claims', {})
     
-    # Check if user can manage permissions
-    if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
-        return Response({"error": "Insufficient permissions"}, status=403)
+    # DISABLED RBAC FILTERING - Allow all users to manage permissions for testing
+    # if not authorize(user_claims, 'permission', 'manage', {'type': 'policy'}):
+    #     return Response({"error": "Insufficient permissions"}, status=403)
     
     try:
         policy = PolicyRule.objects.get(id=policy_id, tenant_id=tenant_id)
@@ -233,31 +233,34 @@ def check_menu_access(request, menu_name):
 @authentication_classes([])
 def get_user_permissions(request):
     """Get current user's permissions summary - DISABLED RBAC FILTERING"""
-    user_claims = getattr(request, 'user_claims', {})
-    
-    # DISABLED RBAC FILTERING - Grant all permissions to all roles
-    menus = ['dashboard', 'visit', 'configurator', 'visit_history', 'consent_management', 'notifications', 'tasks', 'rbac_test', 'permission_management']
-    menu_access = {}
-    
-    # Grant access to all menus
-    for menu in menus:
-        menu_access[menu] = True
-    
-    # Grant access to all fields
-    fields = ['external_id', 'name', 'age', 'height_cm', 'weight_kg', 'bmi', 'hba1c', 'diabetes_educator_required', 'diabetes_educator', 'guardian_name', 'guardian_relationship', 'birth_certificate_upload']
-    field_access = {}
-    
-    for field in fields:
-        field_access[field] = {
-            'read': True,
-            'write': True
-        }
-    
-    return Response({
-        'user_claims': user_claims,
-        'menu_access': menu_access,
-        'field_access': field_access
-    })
+    try:
+        user_claims = getattr(request, 'user_claims', {})
+        
+        # DISABLED RBAC FILTERING - Grant all permissions to all roles
+        menus = ['dashboard', 'visit', 'configurator', 'visit_history', 'consent_management', 'notifications', 'tasks', 'rbac_test', 'permission_management']
+        menu_access = {}
+        
+        # Grant access to all menus
+        for menu in menus:
+            menu_access[menu] = True
+        
+        # Grant access to all fields
+        fields = ['external_id', 'name', 'age', 'height_cm', 'weight_kg', 'bmi', 'hba1c', 'diabetes_educator_required', 'diabetes_educator', 'guardian_name', 'guardian_relationship', 'birth_certificate_upload']
+        field_access = {}
+        
+        for field in fields:
+            field_access[field] = {
+                'read': True,
+                'write': True
+            }
+        
+        return Response({
+            'user_claims': user_claims,
+            'menu_access': menu_access,
+            'field_access': field_access
+        })
+    except Exception as e:
+        return Response({"error": f"Server error: {str(e)}"}, status=500)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

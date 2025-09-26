@@ -516,11 +516,44 @@ export default function Configurator(){
   const [dragIndex, setDragIndex] = useState(null)
   const [activeTab, setActiveTab] = useState('form')
   const [previewData, setPreviewData] = useState({})
+  const [versions, setVersions] = useState({ form: [], rules: [], workflow: [] })
+  const [showVersions, setShowVersions] = useState(false)
 
   async function loadAll(){
     setForm(await api('/config/effective/form/visit_opd/'))
     setRules(await api('/config/effective/rules/visit_opd/'))
     setWorkflow(await api('/config/effective/workflow/visit_opd/'))
+    await loadVersions()
+  }
+
+  async function loadVersions(){
+    try {
+      const [formVersions, ruleVersions, workflowVersions] = await Promise.all([
+        api('/config/versions/form/visit_opd/').catch(() => []),
+        api('/config/versions/rule/visit_opd/').catch(() => []),
+        api('/config/versions/workflow/visit_opd/').catch(() => [])
+      ])
+      setVersions({
+        form: formVersions || [],
+        rules: ruleVersions || [],
+        workflow: workflowVersions || []
+      })
+    } catch (error) {
+      console.error('Failed to load versions:', error)
+    }
+  }
+
+  async function rollback(kind, version){
+    try {
+      await api(`/config/rollback/${kind}/visit_opd/`, { 
+        method: 'POST', 
+        body: { version } 
+      })
+      setMsg(`Rolled back ${kind} to version ${version}`)
+      await loadAll()
+    } catch (error) {
+      setMsg(`Failed to rollback: ${error.message}`)
+    }
   }
 
   useEffect(()=>{ loadAll() }, [])
@@ -609,6 +642,12 @@ export default function Configurator(){
         >
           Workflow
         </button>
+        <button 
+          className={`tab ${showVersions ? 'active' : ''}`}
+          onClick={() => setShowVersions(!showVersions)}
+        >
+          📚 Version History
+        </button>
       </div>
 
       {activeTab === 'form' && (
@@ -678,6 +717,101 @@ export default function Configurator(){
           <div className="actions">
             <button className="btn" onClick={()=>publish('workflow', workflow)}>Publish Workflow</button>
             <button className="btn btn-ghost" onClick={() => setActiveTab('form')}>Edit Form</button>
+          </div>
+        </div>
+      )}
+
+      {showVersions && (
+        <div className="tab-content">
+          <div className="version-history">
+            <h4>Version History & Rollback</h4>
+            <p className="muted-text">View and rollback to previous versions of your configurations.</p>
+            
+            <div className="version-sections">
+              <div className="version-section">
+                <h5>📝 Form Versions</h5>
+                <div className="version-list">
+                  {versions.form.length === 0 ? (
+                    <p className="muted-text">No form versions found</p>
+                  ) : (
+                    versions.form.map((version, index) => (
+                      <div key={version.version} className="version-item">
+                        <div className="version-info">
+                          <span className="version-number">v{version.version}</span>
+                          <span className="version-date">{new Date(version.created_at).toLocaleString()}</span>
+                          <span className="version-status">{version.status}</span>
+                        </div>
+                        <div className="version-actions">
+                          <button 
+                            className="btn btn-sm btn-secondary"
+                            onClick={() => rollback('form', version.version)}
+                            disabled={version.status === 'published'}
+                          >
+                            {version.status === 'published' ? 'Current' : 'Rollback'}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="version-section">
+                <h5>⚙️ Rules Versions</h5>
+                <div className="version-list">
+                  {versions.rules.length === 0 ? (
+                    <p className="muted-text">No rules versions found</p>
+                  ) : (
+                    versions.rules.map((version, index) => (
+                      <div key={version.version} className="version-item">
+                        <div className="version-info">
+                          <span className="version-number">v{version.version}</span>
+                          <span className="version-date">{new Date(version.created_at).toLocaleString()}</span>
+                          <span className="version-status">{version.status}</span>
+                        </div>
+                        <div className="version-actions">
+                          <button 
+                            className="btn btn-sm btn-secondary"
+                            onClick={() => rollback('rule', version.version)}
+                            disabled={version.status === 'published'}
+                          >
+                            {version.status === 'published' ? 'Current' : 'Rollback'}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              <div className="version-section">
+                <h5>🔄 Workflow Versions</h5>
+                <div className="version-list">
+                  {versions.workflow.length === 0 ? (
+                    <p className="muted-text">No workflow versions found</p>
+                  ) : (
+                    versions.workflow.map((version, index) => (
+                      <div key={version.version} className="version-item">
+                        <div className="version-info">
+                          <span className="version-number">v{version.version}</span>
+                          <span className="version-date">{new Date(version.created_at).toLocaleString()}</span>
+                          <span className="version-status">{version.status}</span>
+                        </div>
+                        <div className="version-actions">
+                          <button 
+                            className="btn btn-sm btn-secondary"
+                            onClick={() => rollback('workflow', version.version)}
+                            disabled={version.status === 'published'}
+                          >
+                            {version.status === 'published' ? 'Current' : 'Rollback'}
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

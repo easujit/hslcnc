@@ -46,6 +46,28 @@ body {
   min-height: 60px;
 }
 
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logout-button {
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.logout-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
 .app-title { 
   margin: 0; 
   font-weight: 700; 
@@ -2630,5 +2652,312 @@ body {
   .detail-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Login Page Styles */
+.login-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 20px;
+}
+
+.login-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid var(--border);
+}
+
+.login-title {
+  text-align: center;
+  margin: 0 0 30px 0;
+  color: var(--medical-blue);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.login-form label {
+  font-weight: 500;
+  color: var(--text);
+  font-size: 14px;
+}
+
+.login-form .form-input,
+.login-form .form-select {
+  padding: 12px 16px;
+  border: 2px solid var(--border);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+  background: white;
+}
+
+.login-form .form-input:focus,
+.login-form .form-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-light);
+}
+
+.login-button {
+  background: linear-gradient(135deg, var(--medical-blue), var(--accent));
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 10px;
+}
+
+.login-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.login-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error-message {
+  background: #fef2f2;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: 1px solid #fecaca;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-footer {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.demo-note {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 0;
+  padding: 12px;
+  background: var(--accent-light);
+  border-radius: 6px;
+  border: 1px solid var(--accent);
+}
+
+/* Version History Styles */
+.version-history {
+  padding: 20px 0;
+}
+
+.version-sections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-top: 20px;
+}
+
+.version-section {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.version-section h5 {
+  margin: 0 0 16px 0;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.version-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.version-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.version-item:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.1);
+}
+
+.version-info {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.version-number {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 14px;
+  min-width: 40px;
+}
+
+.version-date {
+  color: var(--muted);
+  font-size: 12px;
+  min-width: 150px;
+}
+
+.version-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.version-status.published {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.version-status.draft {
+  background: var(--warning-light);
+  color: var(--warning);
+}
+
+.version-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-sm {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .version-sections {
+    grid-template-columns: 1fr;
+  }
+  
+  .version-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .version-info {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .version-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
+/* Error Boundary Styles */
+.error-boundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 20px;
+}
+
+.error-content {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+
+.error-content h2 {
+  color: var(--medical-red);
+  margin: 0 0 16px 0;
+  font-size: 24px;
+}
+
+.error-content p {
+  color: var(--muted);
+  margin: 0 0 24px 0;
+  line-height: 1.6;
+}
+
+.error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.error-details {
+  margin-top: 24px;
+  text-align: left;
+}
+
+.error-details summary {
+  cursor: pointer;
+  padding: 8px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-weight: 500;
+  color: var(--text);
+}
+
+.error-details summary:hover {
+  background: var(--accent-light);
+}
+
+.error-stack {
+  background: #f8f9fa;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px;
+  margin-top: 8px;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  font-size: 12px;
+  color: var(--text);
+  overflow-x: auto;
+  white-space: pre-wrap;
+  max-height: 200px;
+  overflow-y: auto;
 }
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import TenantSwitcher from '../components/TenantSwitcher'
 import api from '../lib/api'
 
 export default function App({ children }){
   const location = useLocation()
+  const navigate = useNavigate()
   const [userPermissions, setUserPermissions] = useState(null)
   const [loading, setLoading] = useState(true)
   
@@ -57,6 +58,15 @@ export default function App({ children }){
 
   const navItems = getVisibleNavItems()
 
+  const handleLogout = () => {
+    // Clear localStorage
+    localStorage.removeItem('current_tenant')
+    localStorage.removeItem('current_roles')
+    localStorage.removeItem('current_departments')
+    // Navigate to login
+    navigate('/login')
+  }
+
   if (loading) {
     return (
       <div className="app-root">
@@ -78,7 +88,16 @@ export default function App({ children }){
     <div className="app-root">
       <header className="app-header">
         <h1 className="app-title">Hospital POC</h1>
-        <TenantSwitcher onRoleChange={fetchUserPermissions} />
+        <div className="header-actions">
+          <TenantSwitcher onRoleChange={fetchUserPermissions} />
+          <button 
+            onClick={handleLogout}
+            className="logout-button"
+            title="Logout"
+          >
+            🚪 Logout
+          </button>
+        </div>
       </header>
       <div className="app-main">
         <aside className="app-sidebar">

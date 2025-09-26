@@ -1,0 +1,449 @@
+[
+  {
+    "id": "TC001",
+    "title": "User Login and Dashboard Access",
+    "description": "Verify that users can login successfully and access the React-based dashboard tailored to their role and tenant.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page"
+      },
+      {
+        "type": "action",
+        "description": "Input valid username and password for a tenant-specific user"
+      },
+      {
+        "type": "action",
+        "description": "Click login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Check login is successful and dashboard loads with tenant-specific data"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify dashboard components render according to user role and permissions"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Login Failure with Invalid Credentials",
+    "description": "Check that login fails with invalid or missing credentials and appropriate error messages are displayed.",
+    "category": "error handling",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to login page"
+      },
+      {
+        "type": "action",
+        "description": "Input invalid username or password"
+      },
+      {
+        "type": "action",
+        "description": "Click login button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify login is rejected and an error message is displayed"
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Dynamic Form Configuration Create and Update",
+    "description": "Test that hospital staff can create and modify form configurations including adding/hiding fields, and setting validations and workflows without developer intervention.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as hospital staff user with form configuration privileges"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to Form Configurator UI"
+      },
+      {
+        "type": "action",
+        "description": "Create a new form configuration including fields, validations, and workflow rules"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the new form configuration is saved and versioned"
+      },
+      {
+        "type": "action",
+        "description": "Modify the form by hiding fields and changing validations"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify updates are saved and previous versions remain accessible for rollback"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Form Configuration Rollback Functionality",
+    "description": "Verify rollback functionality of form configurations works correctly within 5 minutes after changes.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create or modify a form configuration"
+      },
+      {
+        "type": "action",
+        "description": "Initiate rollback to a previous form configuration version"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm the form configuration reverted successfully and matches the selected version"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Patient Management - CRUD Operations",
+    "description": "Validate creation, retrieval, update, and deletion of patient records via API and UI, ensuring external ID and custom data management.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create a patient record with valid external ID and custom data through the API"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify patient record is created successfully and accessible"
+      },
+      {
+        "type": "action",
+        "description": "Retrieve patient list and confirm created record is present"
+      },
+      {
+        "type": "action",
+        "description": "Update patient details via API and UI"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm updates persist correctly in the system"
+      },
+      {
+        "type": "action",
+        "description": "Delete patient record"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify patient record is removed and no longer accessible"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Visit Management - Status Tracking and Updates",
+    "description": "Test visit creation, status tracking, and status update functionality with both API and UI components.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create a new patient visit with status via Visit Management API"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify visit is listed with correct details"
+      },
+      {
+        "type": "action",
+        "description": "Retrieve visit details by visit ID"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm visit details match input data"
+      },
+      {
+        "type": "action",
+        "description": "Update visit status using the API endpoint"
+      },
+      {
+        "type": "assertion",
+        "description": "Check the visit status reflects updated state"
+      },
+      {
+        "type": "action",
+        "description": "Access Visits UI pages and confirm UI reflects status updates"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Consent Management Creation and Compliance",
+    "description": "Validate that consents can be created, listed, and audited, ensuring DPDP and ABDM compliance and audit trails are recorded.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Create new consent with valid patient ID, purpose, and data categories via API"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify consent creation returns correct status and stored data"
+      },
+      {
+        "type": "action",
+        "description": "List existing consents and confirm new consent is included"
+      },
+      {
+        "type": "action",
+        "description": "Check audit trail logs reflect the consent creation"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm audit logs comply with DPDP and ABDM standards"
+      },
+      {
+        "type": "action",
+        "description": "Use Consent UI to view and manage consents"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify UI shows consistent consent information with backend"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Consent Validation for Operations",
+    "description": "Check consent verification endpoint for read/write operations with various consent scenarios.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Request consent check for a patient, purpose, and data categories where consent exists and action is allowed"
+      },
+      {
+        "type": "assertion",
+        "description": "Response confirms consent granted"
+      },
+      {
+        "type": "action",
+        "description": "Request consent check where consent is missing or insufficient"
+      },
+      {
+        "type": "assertion",
+        "description": "Response indicates consent denial"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "RBAC Enforcement at Field, Record, and Workflow Levels",
+    "description": "Validate that access control is enforced correctly for users at multiple granularities using the RBAC system.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Fetch user permissions via API for various roles (doctor, nurse, admin)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify permissions include correct scopes at field, record, and workflow levels"
+      },
+      {
+        "type": "action",
+        "description": "Attempt access to restricted fields, records, and workflows from UI and API"
+      },
+      {
+        "type": "assertion",
+        "description": "Validate that access is denied appropriately with error messages or hidden fields"
+      },
+      {
+        "type": "action",
+        "description": "Test permission changes propagate dynamic enforcement without full system restart"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm immediate and correct permission enforcement"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Form Submission Idempotency and Duplication Prevention",
+    "description": "Test submission gateway prevents duplicate form submissions using idempotency keys and performs validation.",
+    "category": "functional",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Submit form data with valid payload and unique Idempotency-Key header"
+      },
+      {
+        "type": "assertion",
+        "description": "Submission succeeds and data saved"
+      },
+      {
+        "type": "action",
+        "description": "Repeate submission with the same Idempotency-Key"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify duplicate submission is rejected or ignored"
+      },
+      {
+        "type": "action",
+        "description": "Submit form with missing or invalid mandatory fields"
+      },
+      {
+        "type": "assertion",
+        "description": "Submission fails with validation error messages"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Orchestration Workflow Execution and Retry",
+    "description": "Check that orchestrator can execute workflows, manage tasks, send notifications, and retry failed tasks.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Trigger orchestration process execution via API"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify processing starts and completes successfully"
+      },
+      {
+        "type": "action",
+        "description": "Simulate task failure within a workflow"
+      },
+      {
+        "type": "action",
+        "description": "Request retry of failed tasks"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm task retries run and complete successfully"
+      },
+      {
+        "type": "action",
+        "description": "Check notifications list API for relevant notifications generated during process"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify notifications delivered to intended recipients"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Multi-Tenancy Data Isolation and Customization",
+    "description": "Validate users from different tenants can only access their own data and configurations are tenant-specific.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Login as a user from one tenant and attempt to retrieve another tenant's patient or visit data via API and UI"
+      },
+      {
+        "type": "assertion",
+        "description": "Access denied or empty results confirming data isolation"
+      },
+      {
+        "type": "action",
+        "description": "Create form configurations in one tenant and verify configurations are not visible or accessible in other tenants"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm tenant-level customization scope enforcement"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Extensions System Runtime Hook Execution",
+    "description": "Test extensions system for runtime hooks and event subscriptions enabling external integrations.",
+    "category": "functional",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Register a runtime extension with hook and event subscriptions"
+      },
+      {
+        "type": "action",
+        "description": "Trigger corresponding events via form submission or workflow execution"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify extension hooks receive and process events correctly"
+      },
+      {
+        "type": "assertion",
+        "description": "Check external integration effects or responses"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Performance - Sub-second Form Loading",
+    "description": "Measure form loading performance to verify sub-second response time under normal and peak load conditions.",
+    "category": "performance",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Request form configuration and form rendering via UI multiple times in normal load"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify response times are consistently below 1000 ms"
+      },
+      {
+        "type": "action",
+        "description": "Simulate peak concurrent users accessing forms"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm system maintains sub-second load times and no error responses"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Audit Trail Integrity for All Data Changes",
+    "description": "Verify audit trails capture all changes to patient data, consent, roles, form configs, and workflows maintaining compliance and data integrity.",
+    "category": "security",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Make changes to patient records, consent, RBAC roles, and workflow configurations"
+      },
+      {
+        "type": "assertion",
+        "description": "Check audit logs reflect all actions with correct timestamp, user info, and before/after states"
+      },
+      {
+        "type": "action",
+        "description": "Attempt unauthorized changes and verify they are blocked and logged"
+      },
+      {
+        "type": "assertion",
+        "description": "Confirm compliance with DPDP and ABDM audit requirements"
+      }
+    ]
+  }
+]

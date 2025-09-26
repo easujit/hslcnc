@@ -1,0 +1,189 @@
+{
+  "tech_stack": [
+    "JavaScript",
+    "React",
+    "Vite",
+    "React Router DOM",
+    "HTML",
+    "CSS",
+    "Fetch API"
+  ],
+  "features": [
+    {
+      "name": "Main Application Router",
+      "description": "Main application entry point with React Router setup and navigation",
+      "files": [
+        "client/src/main.jsx",
+        "client/src/pages/App.jsx"
+      ]
+    },
+    {
+      "name": "Dashboard Component",
+      "description": "Main dashboard page with demo data seeding functionality",
+      "files": [
+        "client/src/pages/Dashboard.jsx"
+      ]
+    },
+    {
+      "name": "Visit Form Component",
+      "description": "Dynamic OPD visit form with real-time validation, BMI calculation, and file upload",
+      "files": [
+        "client/src/pages/Visit.jsx"
+      ]
+    },
+    {
+      "name": "Consent Management Component",
+      "description": "Comprehensive consent management system with patient creation, consent creation, and consent checking",
+      "files": [
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Visits List Component",
+      "description": "List and manage patient visits with status tracking",
+      "files": [
+        "client/src/pages/VisitsList.jsx"
+      ]
+    },
+    {
+      "name": "Configurator Component",
+      "description": "Form configuration management for dynamic form building",
+      "files": [
+        "client/src/pages/Configurator.jsx"
+      ]
+    },
+    {
+      "name": "RBAC Test Component",
+      "description": "Role-based access control testing interface",
+      "files": [
+        "client/src/pages/RBACTest.jsx"
+      ]
+    },
+    {
+      "name": "Permission Management Component",
+      "description": "Permission and role management interface",
+      "files": [
+        "client/src/pages/PermissionManagement.jsx",
+        "client/src/pages/RolePermissions.jsx"
+      ]
+    },
+    {
+      "name": "Notifications Component",
+      "description": "System notifications and alerts management",
+      "files": [
+        "client/src/pages/Notifications.jsx"
+      ]
+    },
+    {
+      "name": "Tasks Component",
+      "description": "Task management and workflow interface",
+      "files": [
+        "client/src/pages/Tasks.jsx"
+      ]
+    },
+    {
+      "name": "API Service Layer",
+      "description": "Centralized API communication with tenant context and authentication",
+      "files": [
+        "client/src/lib/api.js"
+      ]
+    },
+    {
+      "name": "Tenant Switcher Component",
+      "description": "Tenant context management and role switching",
+      "files": [
+        "client/src/components/TenantSwitcher.jsx"
+      ]
+    },
+    {
+      "name": "File Upload Component",
+      "description": "Reusable file upload component with progress tracking",
+      "files": [
+        "client/src/pages/Visit.jsx"
+      ]
+    },
+    {
+      "name": "Form Validation System",
+      "description": "Client-side form validation with real-time feedback",
+      "files": [
+        "client/src/pages/Visit.jsx",
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Modal System",
+      "description": "Reusable modal components for forms and confirmations",
+      "files": [
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Status Management",
+      "description": "Visit status tracking and consent requirement management",
+      "files": [
+        "client/src/pages/Visit.jsx",
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Data Categories Management",
+      "description": "Consent data categories selection and management",
+      "files": [
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Patient Management",
+      "description": "Patient creation and management interface",
+      "files": [
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Consent Checking System",
+      "description": "Real-time consent validation and checking",
+      "files": [
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Responsive Layout System",
+      "description": "Responsive grid layout and navigation system",
+      "files": [
+        "client/src/pages/App.jsx",
+        "client/src/styles.css"
+      ]
+    },
+    {
+      "name": "Error Handling System",
+      "description": "Comprehensive error handling and user feedback",
+      "files": [
+        "client/src/lib/api.js",
+        "client/src/pages/Visit.jsx",
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Loading States Management",
+      "description": "Loading indicators and state management",
+      "files": [
+        "client/src/pages/App.jsx",
+        "client/src/pages/ConsentManagement.jsx"
+      ]
+    },
+    {
+      "name": "Idempotency Key Generation",
+      "description": "Unique key generation for API request deduplication",
+      "files": [
+        "client/src/lib/api.js"
+      ]
+    },
+    {
+      "name": "Local Storage Management",
+      "description": "Tenant context and user preferences storage",
+      "files": [
+        "client/src/lib/api.js"
+      ]
+    }
+  ]
+}

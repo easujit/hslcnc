@@ -1,10 +1,14 @@
-import os
+import os, dj_database_url
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "dev-secret-key"
-DEBUG = True
+
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-not-secret")
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
+# SECRET_KEY = "dev-secret-key"
+# DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 INSTALLED_APPS = [
@@ -41,7 +45,7 @@ MIDDLEWARE = [
     "consent.audit_middleware.AuditMiddleware",
 ]
 
-ROOT_URLCONF = "diabetes_poc.urls"
+ROOT_URLCONF = "server.urls"
 
 TEMPLATES = [
     {
@@ -59,13 +63,13 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "diabetes_poc.wsgi.application"
+WSGI_APPLICATION = "server.wsgi.application"
 
+# Postgres via DATABASE_URL
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    "default": dj_database_url.config(
+        env="DATABASE_URL", conn_max_age=600, ssl_require=True
+    )
 }
 
 # Switchable to MySQL: set env DB_URL like mysql://user:pass@host:port/dbname
@@ -92,10 +96,25 @@ TIME_ZONE = "Asia/Kolkata"
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [],
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
 }
+
+
+# CORS: pick one approach
+CORS_ALLOWED_ORIGINS = [
+    "https://your-site.netlify.app",
+    "https://your-custom-domain.com",
+]
+# (For local dev only you might temporarily use CORS_ALLOW_ALL_ORIGINS=True)
+# See package docs for options.  # :contentReference[oaicite:2]{index=2}
+
+# Static files (admin, etc.)
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+
