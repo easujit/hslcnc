@@ -1,0 +1,5 @@
+Django==4.2.24
+djangorestframework==3.15.2
+pytz
+requests==2.31.0
+PyJWT==2.8.0
