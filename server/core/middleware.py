@@ -18,6 +18,10 @@ class TenantContextMiddleware(MiddlewareMixin):
         # Clear any existing tenant context
         clear_current_tenant()
         
+        # Skip tenant context for admin interface and static files
+        if request.path.startswith('/admin/') or request.path.startswith('/static/') or request.path.startswith('/media/'):
+            return None
+        
         tenant_id = None
         
         # Try to extract from JWT token first
@@ -34,13 +38,16 @@ class TenantContextMiddleware(MiddlewareMixin):
         # Fallback to X-Tenant header (for DEBUG mode)
         if not tenant_id and settings.DEBUG:
             tenant_id = request.META.get('HTTP_X_TENANT')
-        
-        # If no tenant found, return 401
+
+        # If no tenant found, use default tenant for testing
         if not tenant_id:
-            return JsonResponse(
-                {"error": "no tenant", "message": "Tenant context required"},
-                status=401
-            )
+            if settings.DEBUG:
+                tenant_id = "test-tenant"
+            else:
+                return JsonResponse(
+                    {"error": "no tenant", "message": "Tenant context required"},
+                    status=401
+                )
         
         # Set tenant context
         set_current_tenant(tenant_id)
